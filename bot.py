@@ -10,7 +10,7 @@ def help(update, context):
         \t/test: Comprueba que el bot funciona\n\
         \t/help: Acabas de usarlo.")
 
-updater = Updater(token='1056678004:AAGTYKJiOHIIxe9At-cf4DiJVEYAMvngQ9A', use_context=True)
+updater = Updater(token='', use_context=True)
 dispatcher = updater.dispatcher
 
 test_handler = CommandHandler('test', test)
