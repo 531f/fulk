@@ -4,7 +4,7 @@ import threading
 import time
 
 usertimes_dict = {}
-TIME_TO_DIE = 30
+TIME_TO_DIE = 50000
 dictLock = threading.Lock()
 
 class deus_vult(threading.Thread):
@@ -36,10 +36,10 @@ def check_fidelity(delay):
 def pay_our_dues(update,context):
 
     print("Tring to get cha")
-    sender = context.bot.get_chat_member(update.message.chat.id) # TODO: Fix, it doesnt seem to be working, does not print line 40
-    print("Gotcha -> {}".format(sender))
+    sender = context.bot.get_chat_member(update.message.chat_id, update.message.from_user.id) # TODO: Fix, it doesnt seem to be working, does not print line 40
+    print("Gotcha -> {}".format(sender['user']['id']))
     with dictLock:
-        usertimes_dict[sender] = 0
+        usertimes_dict[sender['user']['id']] = 0
 
 
 
