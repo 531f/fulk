@@ -4,8 +4,10 @@ import threading
 import time
 
 usertimes_dict = {}
-TIME_TO_DIE = 50000
+usernames = {}
+TIME_TO_DIE = 20
 dictLock = threading.Lock()
+namesLock = threading.Lock()
 
 class deus_vult(threading.Thread):
     def __init__(self, delay):
@@ -29,15 +31,16 @@ def check_fidelity(delay):
         time.sleep(delay)
         for user, timeout in usertimes_dict.items():
             if timeout >= TIME_TO_DIE:
-                print("You done goofed")
+                print("INFIDEL!", usernames[user])
             with dictLock:
                 usertimes_dict[user] += 1
 
 def pay_our_dues(update,context):
 
-    print("Tring to get cha")
-    sender = context.bot.get_chat_member(update.message.chat_id, update.message.from_user.id) # TODO: Fix, it doesnt seem to be working, does not print line 40
-    print("Gotcha -> {}".format(sender['user']['id']))
+    sender = context.bot.get_chat_member(update.message.chat_id, update.message.from_user.id)
+    print("Thou are free {}, for now ".format(sender['user']['username']))
+    with namesLock:
+        usernames[sender['user']['id']] = sender['user']['username']
     with dictLock:
         usertimes_dict[sender['user']['id']] = 0
 
