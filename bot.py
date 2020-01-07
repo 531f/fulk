@@ -2,6 +2,8 @@ from telegram.ext import Updater
 from telegram.ext import CommandHandler, Filters, MessageHandler
 import threading
 import time
+import json
+import random
 
 usertimes_dict = {}
 usernames = {}
@@ -44,17 +46,27 @@ def pay_our_dues(update,context):
     with dictLock:
         usertimes_dict[sender['user']['id']] = 0
 
-
+def quote(update, context):
+    with open('quotes.json') as fjson:
+        quotes = json.load(fjson)
+        quote = random.randint(0, len(quotes))
+        context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            text="\"{}\" \n\n{}".format(quotes[quote]['quoteText'], quotes[quote]['quoteAuthor'])
+        )
+        
 
 updater = Updater(token='', use_context=True)
 dispatcher = updater.dispatcher
 
 test_handler = CommandHandler('test', test)
 help_handler = CommandHandler('help', help)
+quote_handler = CommandHandler('quote', quote)
 tax_handler = MessageHandler(Filters.text, pay_our_dues)
 dispatcher.add_handler(test_handler)
 dispatcher.add_handler(help_handler)
 dispatcher.add_handler(tax_handler)
+dispatcher.add_handler(quote_handler)
 
 check = deus_vult(1)
 
